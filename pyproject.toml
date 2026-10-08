@@ -1,0 +1,32 @@
+[project]
+name = "sdk-221"
+version = "0.2.0"
+description = "SDK Python de l'API 221 : client généré depuis l'OpenAPI, vérification des webhooks et données de référence hors ligne"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+readme = "README.md"
+keywords = ["senegal", "221", "api", "sdk", "wave", "orange-money", "mobile-money", "fcfa"]
+classifiers = ["Programming Language :: Python :: 3", "Natural Language :: French", "Topic :: Software Development :: Libraries"]
+urls = { Homepage = "https://221.orvlabs.com/documentation", Repository = "https://github.com/stars-organisation/221-sdk-python" }
+dependencies = [
+    "attrs>=26.1.0",
+    "httpx>=0.28.1,<0.29",
+    "typing-extensions>=4.16.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.19,<0.13"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "sdk221"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "mypy==2.4.0",
+    "pytest>=9.1.1",
+]
