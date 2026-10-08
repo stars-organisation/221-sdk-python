@@ -6,36 +6,26 @@ from typing import Any, TypeVar
 from attrs import define as _attrs_define
 from typing_extensions import Self
 
-T = TypeVar("T", bound="ErrorBody")
+T = TypeVar("T", bound="DestinationCodeRequest")
 
 
 @_attrs_define
-class ErrorBody:
+class DestinationCodeRequest:
     """
     Attributes:
-        code (str):
-        details (Any):
-        message (str):
+        code (str): Code à 6 chiffres reçu par e-mail par le propriétaire du compte.
     """
 
     code: str
-    details: Any
-    message: str
 
     def to_dict(self) -> dict[str, Any]:
         code = self.code
-
-        details = self.details
-
-        message = self.message
 
         field_dict: dict[str, Any] = {}
 
         field_dict.update(
             {
                 "code": code,
-                "details": details,
-                "message": message,
             }
         )
 
@@ -46,14 +36,8 @@ class ErrorBody:
         d = dict(src_dict)
         code = d.pop("code")
 
-        details = d.pop("details")
-
-        message = d.pop("message")
-
-        error_body = cls(
+        destination_code_request = cls(
             code=code,
-            details=details,
-            message=message,
         )
 
-        return error_body
+        return destination_code_request

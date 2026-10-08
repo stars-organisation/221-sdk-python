@@ -27,12 +27,12 @@ class Refund:
             décimale.
         fee (str): Montant en francs CFA entiers (XOF), écrit en chaîne de chiffres, sans espace ni décimale.
         fee_payer (RefundFeePayer):
+        id (UUID):
         livemode (bool): true : objet du mode live ; false : mode test.
         merchant_debited (str): Montant en francs CFA entiers (XOF), écrit en chaîne de chiffres, sans espace ni
             décimale.
         payment_id (UUID):
         reason (RefundReason):
-        refund_id (UUID):
         status (RefundStatus):
         updated_at (datetime.datetime):
     """
@@ -43,11 +43,11 @@ class Refund:
     customer_receives: str
     fee: str
     fee_payer: RefundFeePayer
+    id: UUID
     livemode: bool
     merchant_debited: str
     payment_id: UUID
     reason: RefundReason
-    refund_id: UUID
     status: RefundStatus
     updated_at: datetime.datetime
 
@@ -64,6 +64,8 @@ class Refund:
 
         fee_payer = self.fee_payer.value
 
+        id = str(self.id)
+
         livemode = self.livemode
 
         merchant_debited = self.merchant_debited
@@ -71,8 +73,6 @@ class Refund:
         payment_id = str(self.payment_id)
 
         reason = self.reason.value
-
-        refund_id = str(self.refund_id)
 
         status = self.status.value
 
@@ -88,11 +88,11 @@ class Refund:
                 "customer_receives": customer_receives,
                 "fee": fee,
                 "fee_payer": fee_payer,
+                "id": id,
                 "livemode": livemode,
                 "merchant_debited": merchant_debited,
                 "payment_id": payment_id,
                 "reason": reason,
-                "refund_id": refund_id,
                 "status": status,
                 "updated_at": updated_at,
             }
@@ -115,6 +115,8 @@ class Refund:
 
         fee_payer = RefundFeePayer(d.pop("fee_payer"))
 
+        id = UUID(d.pop("id"))
+
         livemode = d.pop("livemode")
 
         merchant_debited = d.pop("merchant_debited")
@@ -122,8 +124,6 @@ class Refund:
         payment_id = UUID(d.pop("payment_id"))
 
         reason = RefundReason(d.pop("reason"))
-
-        refund_id = UUID(d.pop("refund_id"))
 
         status = RefundStatus(d.pop("status"))
 
@@ -136,11 +136,11 @@ class Refund:
             customer_receives=customer_receives,
             fee=fee,
             fee_payer=fee_payer,
+            id=id,
             livemode=livemode,
             merchant_debited=merchant_debited,
             payment_id=payment_id,
             reason=reason,
-            refund_id=refund_id,
             status=status,
             updated_at=updated_at,
         )

@@ -6,8 +6,6 @@ from typing import TYPE_CHECKING, Any, TypeVar, cast
 from attrs import define as _attrs_define
 from typing_extensions import Self
 
-from ..models.geocodage_relation import GeocodageRelation
-
 if TYPE_CHECKING:
     from ..models.lieu_resume import LieuResume
     from ..models.source import Source
@@ -24,10 +22,10 @@ class Geocodage:
         ambigu (bool):
         avertissements (list[str] | None):
         lat (float | None):
-        lieu (LieuResume):
+        lieu (LieuResume | None):
         lon (float | None):
         precision (None | str):
-        relation (GeocodageRelation):
+        relation (None | str): en_face_de, derriere, a_cote_de ou pres_de ; null si aucune relation n'est reconnue.
         repere (None | str):
         sources (list[Source] | None):
         texte (str):
@@ -37,15 +35,17 @@ class Geocodage:
     ambigu: bool
     avertissements: list[str] | None
     lat: float | None
-    lieu: LieuResume
+    lieu: LieuResume | None
     lon: float | None
     precision: None | str
-    relation: GeocodageRelation
+    relation: None | str
     repere: None | str
     sources: list[Source] | None
     texte: str
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.lieu_resume import LieuResume
+
         alternatives: list[dict[str, Any]] | None
         if isinstance(self.alternatives, list):
             alternatives = []
@@ -68,7 +68,11 @@ class Geocodage:
         lat: float | None
         lat = self.lat
 
-        lieu = self.lieu.to_dict()
+        lieu: dict[str, Any] | None
+        if isinstance(self.lieu, LieuResume):
+            lieu = self.lieu.to_dict()
+        else:
+            lieu = self.lieu
 
         lon: float | None
         lon = self.lon
@@ -76,7 +80,8 @@ class Geocodage:
         precision: None | str
         precision = self.precision
 
-        relation = self.relation.value
+        relation: None | str
+        relation = self.relation
 
         repere: None | str
         repere = self.repere
@@ -166,7 +171,20 @@ class Geocodage:
 
         lat = _parse_lat(d.pop("lat"))
 
-        lieu = LieuResume.from_dict(d.pop("lieu"))
+        def _parse_lieu(data: object) -> LieuResume | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                lieu_type_0 = LieuResume.from_dict(data)
+
+                return lieu_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(LieuResume | None, data)
+
+        lieu = _parse_lieu(d.pop("lieu"))
 
         def _parse_lon(data: object) -> float | None:
             if data is None:
@@ -182,7 +200,12 @@ class Geocodage:
 
         precision = _parse_precision(d.pop("precision"))
 
-        relation = GeocodageRelation(d.pop("relation"))
+        def _parse_relation(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        relation = _parse_relation(d.pop("relation"))
 
         def _parse_repere(data: object) -> None | str:
             if data is None:

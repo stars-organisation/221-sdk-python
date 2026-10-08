@@ -18,15 +18,15 @@ class CleCreee:
     Attributes:
         created_at (datetime.datetime):
         daily_limit (int):
-        disabled_at (datetime.datetime): Désactivation par un administrateur (usage abusif).
+        disabled_at (datetime.datetime | None): Désactivation par un administrateur (usage abusif).
         disabled_reason (None | str):
-        expires_at (datetime.datetime): Fin de validité ; null : sans expiration.
+        expires_at (datetime.datetime | None): Fin de validité ; null : sans expiration.
         id (str):
-        last_used_at (datetime.datetime):
+        last_used_at (datetime.datetime | None):
         mode (CleCreeeMode): test : aucun argent réel ; live : argent réel.
         name (str):
         prefix (str):
-        revoked_at (datetime.datetime):
+        revoked_at (datetime.datetime | None):
         rotated_from (None | str): Clé remplacée par celle-ci lors d'une rotation ; null sinon.
         scopes (list[str] | None): Produits que la clé peut appeler : payments, data.
         secret (str): À conserver : il ne sera plus jamais affiché.
@@ -34,15 +34,15 @@ class CleCreee:
 
     created_at: datetime.datetime
     daily_limit: int
-    disabled_at: datetime.datetime
+    disabled_at: datetime.datetime | None
     disabled_reason: None | str
-    expires_at: datetime.datetime
+    expires_at: datetime.datetime | None
     id: str
-    last_used_at: datetime.datetime
+    last_used_at: datetime.datetime | None
     mode: CleCreeeMode
     name: str
     prefix: str
-    revoked_at: datetime.datetime
+    revoked_at: datetime.datetime | None
     rotated_from: None | str
     scopes: list[str] | None
     secret: str
@@ -52,16 +52,28 @@ class CleCreee:
 
         daily_limit = self.daily_limit
 
-        disabled_at = self.disabled_at.isoformat()
+        disabled_at: None | str
+        if isinstance(self.disabled_at, datetime.datetime):
+            disabled_at = self.disabled_at.isoformat()
+        else:
+            disabled_at = self.disabled_at
 
         disabled_reason: None | str
         disabled_reason = self.disabled_reason
 
-        expires_at = self.expires_at.isoformat()
+        expires_at: None | str
+        if isinstance(self.expires_at, datetime.datetime):
+            expires_at = self.expires_at.isoformat()
+        else:
+            expires_at = self.expires_at
 
         id = self.id
 
-        last_used_at = self.last_used_at.isoformat()
+        last_used_at: None | str
+        if isinstance(self.last_used_at, datetime.datetime):
+            last_used_at = self.last_used_at.isoformat()
+        else:
+            last_used_at = self.last_used_at
 
         mode = self.mode.value
 
@@ -69,7 +81,11 @@ class CleCreee:
 
         prefix = self.prefix
 
-        revoked_at = self.revoked_at.isoformat()
+        revoked_at: None | str
+        if isinstance(self.revoked_at, datetime.datetime):
+            revoked_at = self.revoked_at.isoformat()
+        else:
+            revoked_at = self.revoked_at
 
         rotated_from: None | str
         rotated_from = self.rotated_from
@@ -113,7 +129,20 @@ class CleCreee:
 
         daily_limit = d.pop("daily_limit")
 
-        disabled_at = datetime.datetime.fromisoformat(d.pop("disabled_at"))
+        def _parse_disabled_at(data: object) -> datetime.datetime | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                disabled_at_type_0 = datetime.datetime.fromisoformat(data)
+
+                return disabled_at_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None, data)
+
+        disabled_at = _parse_disabled_at(d.pop("disabled_at"))
 
         def _parse_disabled_reason(data: object) -> None | str:
             if data is None:
@@ -122,11 +151,37 @@ class CleCreee:
 
         disabled_reason = _parse_disabled_reason(d.pop("disabled_reason"))
 
-        expires_at = datetime.datetime.fromisoformat(d.pop("expires_at"))
+        def _parse_expires_at(data: object) -> datetime.datetime | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                expires_at_type_0 = datetime.datetime.fromisoformat(data)
+
+                return expires_at_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None, data)
+
+        expires_at = _parse_expires_at(d.pop("expires_at"))
 
         id = d.pop("id")
 
-        last_used_at = datetime.datetime.fromisoformat(d.pop("last_used_at"))
+        def _parse_last_used_at(data: object) -> datetime.datetime | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                last_used_at_type_0 = datetime.datetime.fromisoformat(data)
+
+                return last_used_at_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None, data)
+
+        last_used_at = _parse_last_used_at(d.pop("last_used_at"))
 
         mode = CleCreeeMode(d.pop("mode"))
 
@@ -134,7 +189,20 @@ class CleCreee:
 
         prefix = d.pop("prefix")
 
-        revoked_at = datetime.datetime.fromisoformat(d.pop("revoked_at"))
+        def _parse_revoked_at(data: object) -> datetime.datetime | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                revoked_at_type_0 = datetime.datetime.fromisoformat(data)
+
+                return revoked_at_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None, data)
+
+        revoked_at = _parse_revoked_at(d.pop("revoked_at"))
 
         def _parse_rotated_from(data: object) -> None | str:
             if data is None:

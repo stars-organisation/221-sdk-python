@@ -8,16 +8,21 @@ from .activation_live_body import ActivationLiveBody
 from .adhesion import Adhesion
 from .adhesion_role import AdhesionRole
 from .adresse_normalisee import AdresseNormalisee
-from .adresse_normalisee_relation import AdresseNormaliseeRelation
 from .answer_input_body import AnswerInputBody
 from .answer_onboarding_question import AnswerOnboardingQuestion
+from .apercu_invitation import ApercuInvitation
+from .apercu_invitation_role import ApercuInvitationRole
+from .apercu_invitation_status import ApercuInvitationStatus
 from .appel_journal import AppelJournal
 from .balances import Balances
 from .balances_gateway_mode import BalancesGatewayMode
 from .balances_rails import BalancesRails
+from .bank_tier import BankTier
 from .banque import Banque
 from .cle_api import CleApi
 from .cle_api_mode import CleApiMode
+from .cle_appelante import CleAppelante
+from .cle_appelante_mode import CleAppelanteMode
 from .cle_creee import CleCreee
 from .cle_creee_mode import CleCreeeMode
 from .collection_payout import CollectionPayout
@@ -43,11 +48,11 @@ from .demande_input_body_kind import DemandeInputBodyKind
 from .demande_kind import DemandeKind
 from .demande_liste import DemandeListe
 from .demande_status import DemandeStatus
+from .destination_code_request import DestinationCodeRequest
+from .destination_verification import DestinationVerification
 from .dispute import Dispute
 from .dispute_challenge_request import DisputeChallengeRequest
 from .dispute_currency import DisputeCurrency
-from .dispute_dispute_stage import DisputeDisputeStage
-from .dispute_dispute_status import DisputeDisputeStatus
 from .dispute_evidence import DisputeEvidence
 from .dispute_evidence_evidence_type import DisputeEvidenceEvidenceType
 from .dispute_evidence_file import DisputeEvidenceFile
@@ -56,14 +61,17 @@ from .dispute_evidence_upload_evidence_type import DisputeEvidenceUploadEvidence
 from .dispute_reason import DisputeReason
 from .dispute_request import DisputeRequest
 from .dispute_request_reason import DisputeRequestReason
+from .dispute_stage import DisputeStage
+from .dispute_status import DisputeStatus
 from .distance import Distance
 from .distance_methode import DistanceMethode
+from .envoi_test import EnvoiTest
 from .error import Error
-from .error_body import ErrorBody
+from .error_fields import ErrorFields
 from .export_compte_response_200 import ExportCompteResponse200
 from .extremite import Extremite
+from .fees import Fees
 from .geocodage import Geocodage
-from .geocodage_relation import GeocodageRelation
 from .health import Health
 from .invitation import Invitation
 from .invitation_role import InvitationRole
@@ -85,7 +93,6 @@ from .kyc_session_status import KycSessionStatus
 from .kyc_status import KycStatus
 from .kyc_status_merchant_status import KycStatusMerchantStatus
 from .kyc_status_status import KycStatusStatus
-from .kyc_status_withdrawals_blocked_reason import KycStatusWithdrawalsBlockedReason
 from .lieu import Lieu
 from .lieu_detail import LieuDetail
 from .lieu_page import LieuPage
@@ -99,7 +106,7 @@ from .meta import Meta
 from .mode_live import ModeLive
 from .montant import Montant
 from .montant_currency import MontantCurrency
-from .next_action_type_0 import NextActionType0
+from .next_action_type_0_deep_links import NextActionType0DeepLinks
 from .next_action_type_0_type import NextActionType0Type
 from .nom_bilingue import NomBilingue
 from .nouveau_projet_body import NouveauProjetBody
@@ -134,13 +141,10 @@ from .pay_error_limit_type import PayErrorLimitType
 from .pay_error_merchant_status import PayErrorMerchantStatus
 from .payment import Payment
 from .payment_attempt import PaymentAttempt
-from .payment_attempt_error_code import PaymentAttemptErrorCode
 from .payment_currency import PaymentCurrency
 from .payment_customer import PaymentCustomer
 from .payment_detail import PaymentDetail
 from .payment_detail_currency import PaymentDetailCurrency
-from .payment_detail_error_code import PaymentDetailErrorCode
-from .payment_detail_method import PaymentDetailMethod
 from .payment_detail_rail import PaymentDetailRail
 from .payment_detail_status import PaymentDetailStatus
 from .payment_detail_withdrawal_eligibility import PaymentDetailWithdrawalEligibility
@@ -151,11 +155,10 @@ from .payment_link_status import PaymentLinkStatus
 from .payment_link_status_request import PaymentLinkStatusRequest
 from .payment_link_status_request_status import PaymentLinkStatusRequestStatus
 from .payment_list import PaymentList
-from .payment_method import PaymentMethod
 from .payment_rail import PaymentRail
 from .payment_request import PaymentRequest
 from .payment_request_currency import PaymentRequestCurrency
-from .payment_request_method import PaymentRequestMethod
+from .payment_request_customer_device import PaymentRequestCustomerDevice
 from .payment_request_rail import PaymentRequestRail
 from .payment_status import PaymentStatus
 from .payment_withdrawal_eligibility import PaymentWithdrawalEligibility
@@ -164,16 +167,26 @@ from .payments_calls_day import PaymentsCallsDay
 from .payments_health import PaymentsHealth
 from .payments_health_gateway_mode import PaymentsHealthGatewayMode
 from .payout import Payout
+from .payout_debit import PayoutDebit
+from .payout_debit_rail import PayoutDebitRail
 from .payout_destination import PayoutDestination
 from .payout_destination_rail import PayoutDestinationRail
 from .payout_destination_request import PayoutDestinationRequest
 from .payout_destination_request_rail import PayoutDestinationRequestRail
+from .payout_destination_request_type import PayoutDestinationRequestType
+from .payout_destination_type import PayoutDestinationType
+from .payout_failure_reason import PayoutFailureReason
 from .payout_pending import PayoutPending
 from .payout_quote import PayoutQuote
+from .payout_quote_delay import PayoutQuoteDelay
+from .payout_quote_destination_type import PayoutQuoteDestinationType
 from .payout_quote_rail import PayoutQuoteRail
 from .payout_quote_request import PayoutQuoteRequest
 from .payout_quote_request_rail import PayoutQuoteRequestRail
 from .payout_rail import PayoutRail
+from .payout_receipt import PayoutReceipt
+from .payout_receipt_destination_type import PayoutReceiptDestinationType
+from .payout_receipt_rail import PayoutReceiptRail
 from .payout_request import PayoutRequest
 from .prefixe_operateur import PrefixeOperateur
 from .prefixe_operateur_type import PrefixeOperateurType
@@ -252,16 +265,21 @@ __all__ = (
     "Adhesion",
     "AdhesionRole",
     "AdresseNormalisee",
-    "AdresseNormaliseeRelation",
     "AnswerInputBody",
     "AnswerOnboardingQuestion",
+    "ApercuInvitation",
+    "ApercuInvitationRole",
+    "ApercuInvitationStatus",
     "AppelJournal",
     "Balances",
     "BalancesGatewayMode",
     "BalancesRails",
+    "BankTier",
     "Banque",
     "CleApi",
     "CleApiMode",
+    "CleAppelante",
+    "CleAppelanteMode",
     "CleCreee",
     "CleCreeeMode",
     "CollectionPayout",
@@ -287,11 +305,11 @@ __all__ = (
     "DemandeKind",
     "DemandeListe",
     "DemandeStatus",
+    "DestinationCodeRequest",
+    "DestinationVerification",
     "Dispute",
     "DisputeChallengeRequest",
     "DisputeCurrency",
-    "DisputeDisputeStage",
-    "DisputeDisputeStatus",
     "DisputeEvidence",
     "DisputeEvidenceEvidenceType",
     "DisputeEvidenceFile",
@@ -300,14 +318,17 @@ __all__ = (
     "DisputeReason",
     "DisputeRequest",
     "DisputeRequestReason",
+    "DisputeStage",
+    "DisputeStatus",
     "Distance",
     "DistanceMethode",
+    "EnvoiTest",
     "Error",
-    "ErrorBody",
+    "ErrorFields",
     "ExportCompteResponse200",
     "Extremite",
+    "Fees",
     "Geocodage",
-    "GeocodageRelation",
     "Health",
     "Invitation",
     "InvitationRole",
@@ -329,7 +350,6 @@ __all__ = (
     "KycStatus",
     "KycStatusMerchantStatus",
     "KycStatusStatus",
-    "KycStatusWithdrawalsBlockedReason",
     "Lieu",
     "LieuDetail",
     "LieuPage",
@@ -343,7 +363,7 @@ __all__ = (
     "ModeLive",
     "Montant",
     "MontantCurrency",
-    "NextActionType0",
+    "NextActionType0DeepLinks",
     "NextActionType0Type",
     "NomBilingue",
     "NouveauProjetBody",
@@ -378,13 +398,10 @@ __all__ = (
     "PayErrorMerchantStatus",
     "Payment",
     "PaymentAttempt",
-    "PaymentAttemptErrorCode",
     "PaymentCurrency",
     "PaymentCustomer",
     "PaymentDetail",
     "PaymentDetailCurrency",
-    "PaymentDetailErrorCode",
-    "PaymentDetailMethod",
     "PaymentDetailRail",
     "PaymentDetailStatus",
     "PaymentDetailWithdrawalEligibility",
@@ -395,11 +412,10 @@ __all__ = (
     "PaymentLinkStatusRequest",
     "PaymentLinkStatusRequestStatus",
     "PaymentList",
-    "PaymentMethod",
     "PaymentRail",
     "PaymentRequest",
     "PaymentRequestCurrency",
-    "PaymentRequestMethod",
+    "PaymentRequestCustomerDevice",
     "PaymentRequestRail",
     "PaymentStatus",
     "PaymentWithdrawalEligibility",
@@ -408,16 +424,26 @@ __all__ = (
     "PaymentsHealth",
     "PaymentsHealthGatewayMode",
     "Payout",
+    "PayoutDebit",
+    "PayoutDebitRail",
     "PayoutDestination",
     "PayoutDestinationRail",
     "PayoutDestinationRequest",
     "PayoutDestinationRequestRail",
+    "PayoutDestinationRequestType",
+    "PayoutDestinationType",
+    "PayoutFailureReason",
     "PayoutPending",
     "PayoutQuote",
+    "PayoutQuoteDelay",
+    "PayoutQuoteDestinationType",
     "PayoutQuoteRail",
     "PayoutQuoteRequest",
     "PayoutQuoteRequestRail",
     "PayoutRail",
+    "PayoutReceipt",
+    "PayoutReceiptDestinationType",
+    "PayoutReceiptRail",
     "PayoutRequest",
     "PrefixeOperateur",
     "PrefixeOperateurType",

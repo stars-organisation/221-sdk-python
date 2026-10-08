@@ -27,11 +27,11 @@ class RefundCore:
             décimale.
         fee (str): Montant en francs CFA entiers (XOF), écrit en chaîne de chiffres, sans espace ni décimale.
         fee_payer (RefundCoreFeePayer):
+        id (UUID):
         merchant_debited (str): Montant en francs CFA entiers (XOF), écrit en chaîne de chiffres, sans espace ni
             décimale.
         payment_id (UUID):
         reason (RefundCoreReason):
-        refund_id (UUID):
         status (RefundCoreStatus):
         updated_at (datetime.datetime):
     """
@@ -42,10 +42,10 @@ class RefundCore:
     customer_receives: str
     fee: str
     fee_payer: RefundCoreFeePayer
+    id: UUID
     merchant_debited: str
     payment_id: UUID
     reason: RefundCoreReason
-    refund_id: UUID
     status: RefundCoreStatus
     updated_at: datetime.datetime
 
@@ -62,13 +62,13 @@ class RefundCore:
 
         fee_payer = self.fee_payer.value
 
+        id = str(self.id)
+
         merchant_debited = self.merchant_debited
 
         payment_id = str(self.payment_id)
 
         reason = self.reason.value
-
-        refund_id = str(self.refund_id)
 
         status = self.status.value
 
@@ -84,10 +84,10 @@ class RefundCore:
                 "customer_receives": customer_receives,
                 "fee": fee,
                 "fee_payer": fee_payer,
+                "id": id,
                 "merchant_debited": merchant_debited,
                 "payment_id": payment_id,
                 "reason": reason,
-                "refund_id": refund_id,
                 "status": status,
                 "updated_at": updated_at,
             }
@@ -110,13 +110,13 @@ class RefundCore:
 
         fee_payer = RefundCoreFeePayer(d.pop("fee_payer"))
 
+        id = UUID(d.pop("id"))
+
         merchant_debited = d.pop("merchant_debited")
 
         payment_id = UUID(d.pop("payment_id"))
 
         reason = RefundCoreReason(d.pop("reason"))
-
-        refund_id = UUID(d.pop("refund_id"))
 
         status = RefundCoreStatus(d.pop("status"))
 
@@ -129,10 +129,10 @@ class RefundCore:
             customer_receives=customer_receives,
             fee=fee,
             fee_payer=fee_payer,
+            id=id,
             merchant_debited=merchant_debited,
             payment_id=payment_id,
             reason=reason,
-            refund_id=refund_id,
             status=status,
             updated_at=updated_at,
         )

@@ -1,6 +1,6 @@
 [project]
 name = "sdk-221"
-version = "0.2.0"
+version = "0.2.1"
 description = "SDK Python de l'API 221 : client généré depuis l'OpenAPI, vérification des webhooks et données de référence hors ligne"
 license = "Apache-2.0"
 license-files = ["LICENSE"]

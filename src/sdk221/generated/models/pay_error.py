@@ -28,26 +28,35 @@ class PayError:
             d'erreur.
         message (str): Message lisible, en français ou en anglais selon ?lang ou Accept-Language.
         request_id (UUID): Identifiant de la requête, aussi dans l'en-tête X-Request-Id : à donner au support.
+        attempts_left (int | Unset): INVALID_CODE : essais restants pour ce code.
         fields (PayErrorFields | Unset): Un message par champ refusé du corps de la requête.
         gateway_mode (str | Unset): PAYMENTS_UNAVAILABLE : raison pour le mode demandé (not_wired : pas de fournisseur
             branché).
         kyc_status (PayErrorKycStatus | Unset): KYC_REQUIRED : état de la vérification d'identité.
-        limit (int | Unset): MERCHANT_LIMIT_EXCEEDED : valeur du plafond en XOF.
-        limit_type (PayErrorLimitType | Unset): MERCHANT_LIMIT_EXCEEDED : plafond atteint.
+        limit (int | Unset): Valeur de la limite : en XOF, ou en nombre de retraits pour daily_count.
+        limit_type (PayErrorLimitType | Unset): MERCHANT_LIMIT_EXCEEDED (daily, monthly) ou WITHDRAWAL_LIMIT_EXCEEDED
+            (les autres) : limite atteinte.
+        max_amount (int | Unset): BELOW_MINIMUM, ABOVE_MAXIMUM : montant maximum d'un virement bancaire, en XOF.
         merchant_status (PayErrorMerchantStatus | Unset): MERCHANT_SUSPENDED : état du compte.
+        min_amount (int | Unset): BELOW_MINIMUM, ABOVE_MAXIMUM : montant minimum d'un virement bancaire, en XOF.
         missing (list[str] | Unset): MISSING_CAPTURES : photos encore à envoyer.
+        remaining (int | Unset): MONTHLY_LIMIT_REACHED : virements bancaires encore possibles ce mois, en XOF.
     """
 
     code: PayErrorCode
     message: str
     request_id: UUID
+    attempts_left: int | Unset = UNSET
     fields: PayErrorFields | Unset = UNSET
     gateway_mode: str | Unset = UNSET
     kyc_status: PayErrorKycStatus | Unset = UNSET
     limit: int | Unset = UNSET
     limit_type: PayErrorLimitType | Unset = UNSET
+    max_amount: int | Unset = UNSET
     merchant_status: PayErrorMerchantStatus | Unset = UNSET
+    min_amount: int | Unset = UNSET
     missing: list[str] | Unset = UNSET
+    remaining: int | Unset = UNSET
 
     def to_dict(self) -> dict[str, Any]:
         code = self.code.value
@@ -55,6 +64,8 @@ class PayError:
         message = self.message
 
         request_id = str(self.request_id)
+
+        attempts_left = self.attempts_left
 
         fields: dict[str, Any] | Unset = UNSET
         if not isinstance(self.fields, Unset):
@@ -72,13 +83,19 @@ class PayError:
         if not isinstance(self.limit_type, Unset):
             limit_type = self.limit_type.value
 
+        max_amount = self.max_amount
+
         merchant_status: str | Unset = UNSET
         if not isinstance(self.merchant_status, Unset):
             merchant_status = self.merchant_status.value
 
+        min_amount = self.min_amount
+
         missing: list[str] | Unset = UNSET
         if not isinstance(self.missing, Unset):
             missing = self.missing
+
+        remaining = self.remaining
 
         field_dict: dict[str, Any] = {}
 
@@ -89,6 +106,8 @@ class PayError:
                 "request_id": request_id,
             }
         )
+        if attempts_left is not UNSET:
+            field_dict["attempts_left"] = attempts_left
         if fields is not UNSET:
             field_dict["fields"] = fields
         if gateway_mode is not UNSET:
@@ -99,10 +118,16 @@ class PayError:
             field_dict["limit"] = limit
         if limit_type is not UNSET:
             field_dict["limit_type"] = limit_type
+        if max_amount is not UNSET:
+            field_dict["max_amount"] = max_amount
         if merchant_status is not UNSET:
             field_dict["merchant_status"] = merchant_status
+        if min_amount is not UNSET:
+            field_dict["min_amount"] = min_amount
         if missing is not UNSET:
             field_dict["missing"] = missing
+        if remaining is not UNSET:
+            field_dict["remaining"] = remaining
 
         return field_dict
 
@@ -116,6 +141,8 @@ class PayError:
         message = d.pop("message")
 
         request_id = UUID(d.pop("request_id"))
+
+        attempts_left = d.pop("attempts_left", UNSET)
 
         _fields = d.pop("fields", UNSET)
         fields: PayErrorFields | Unset
@@ -142,6 +169,8 @@ class PayError:
         else:
             limit_type = PayErrorLimitType(_limit_type)
 
+        max_amount = d.pop("max_amount", UNSET)
+
         _merchant_status = d.pop("merchant_status", UNSET)
         merchant_status: PayErrorMerchantStatus | Unset
         if isinstance(_merchant_status, Unset):
@@ -149,19 +178,27 @@ class PayError:
         else:
             merchant_status = PayErrorMerchantStatus(_merchant_status)
 
+        min_amount = d.pop("min_amount", UNSET)
+
         missing = cast(list[str], d.pop("missing", UNSET))
+
+        remaining = d.pop("remaining", UNSET)
 
         pay_error = cls(
             code=code,
             message=message,
             request_id=request_id,
+            attempts_left=attempts_left,
             fields=fields,
             gateway_mode=gateway_mode,
             kyc_status=kyc_status,
             limit=limit,
             limit_type=limit_type,
+            max_amount=max_amount,
             merchant_status=merchant_status,
+            min_amount=min_amount,
             missing=missing,
+            remaining=remaining,
         )
 
         return pay_error

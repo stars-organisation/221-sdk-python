@@ -9,7 +9,6 @@ from attrs import define as _attrs_define
 from typing_extensions import Self
 
 from ..models.payment_currency import PaymentCurrency
-from ..models.payment_method import PaymentMethod
 from ..models.payment_rail import PaymentRail
 from ..models.payment_status import PaymentStatus
 from ..models.payment_withdrawal_eligibility import PaymentWithdrawalEligibility
@@ -41,9 +40,11 @@ class Payment:
         status (PaymentStatus):
         withdrawal_eligibility (PaymentWithdrawalEligibility): confirmed : l'argent est retirable.
         discount_amount (str | Unset): Remise accordée, avec offer_code.
-        method (PaymentMethod | Unset): Présent seulement pour sn_wave et sn_orange. Utilisez rail.
         offer_code (str | Unset): Présent si un code promo a été appliqué.
         original_amount (None | str | Unset): Montant avant remise, avec offer_code.
+        payment_link_description (str | Unset): Présent pour un paiement fait sur un lien de paiement : la description
+            du lien, à afficher à la place de merchant_reference (link:…). EN: present for a payment made on a payment link:
+            the link's description, to show instead of merchant_reference (link:…).
     """
 
     amount: str
@@ -60,9 +61,9 @@ class Payment:
     status: PaymentStatus
     withdrawal_eligibility: PaymentWithdrawalEligibility
     discount_amount: str | Unset = UNSET
-    method: PaymentMethod | Unset = UNSET
     offer_code: str | Unset = UNSET
     original_amount: None | str | Unset = UNSET
+    payment_link_description: str | Unset = UNSET
 
     def to_dict(self) -> dict[str, Any]:
         from ..models.next_action_type_0 import NextActionType0
@@ -102,10 +103,6 @@ class Payment:
 
         discount_amount = self.discount_amount
 
-        method: str | Unset = UNSET
-        if not isinstance(self.method, Unset):
-            method = self.method.value
-
         offer_code = self.offer_code
 
         original_amount: None | str | Unset
@@ -113,6 +110,8 @@ class Payment:
             original_amount = UNSET
         else:
             original_amount = self.original_amount
+
+        payment_link_description = self.payment_link_description
 
         field_dict: dict[str, Any] = {}
 
@@ -135,12 +134,12 @@ class Payment:
         )
         if discount_amount is not UNSET:
             field_dict["discount_amount"] = discount_amount
-        if method is not UNSET:
-            field_dict["method"] = method
         if offer_code is not UNSET:
             field_dict["offer_code"] = offer_code
         if original_amount is not UNSET:
             field_dict["original_amount"] = original_amount
+        if payment_link_description is not UNSET:
+            field_dict["payment_link_description"] = payment_link_description
 
         return field_dict
 
@@ -207,13 +206,6 @@ class Payment:
 
         discount_amount = d.pop("discount_amount", UNSET)
 
-        _method = d.pop("method", UNSET)
-        method: PaymentMethod | Unset
-        if isinstance(_method, Unset):
-            method = UNSET
-        else:
-            method = PaymentMethod(_method)
-
         offer_code = d.pop("offer_code", UNSET)
 
         def _parse_original_amount(data: object) -> None | str | Unset:
@@ -224,6 +216,8 @@ class Payment:
             return cast(None | str | Unset, data)
 
         original_amount = _parse_original_amount(d.pop("original_amount", UNSET))
+
+        payment_link_description = d.pop("payment_link_description", UNSET)
 
         payment = cls(
             amount=amount,
@@ -240,9 +234,9 @@ class Payment:
             status=status,
             withdrawal_eligibility=withdrawal_eligibility,
             discount_amount=discount_amount,
-            method=method,
             offer_code=offer_code,
             original_amount=original_amount,
+            payment_link_description=payment_link_description,
         )
 
         return payment

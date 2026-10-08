@@ -14,15 +14,15 @@ T = TypeVar("T", bound="DisputeEvidenceFile")
 class DisputeEvidenceFile:
     """
     Attributes:
-        file_id (UUID):
+        id (UUID):
         livemode (bool): true : objet du mode live ; false : mode test.
     """
 
-    file_id: UUID
+    id: UUID
     livemode: bool
 
     def to_dict(self) -> dict[str, Any]:
-        file_id = str(self.file_id)
+        id = str(self.id)
 
         livemode = self.livemode
 
@@ -30,7 +30,7 @@ class DisputeEvidenceFile:
 
         field_dict.update(
             {
-                "file_id": file_id,
+                "id": id,
                 "livemode": livemode,
             }
         )
@@ -40,12 +40,12 @@ class DisputeEvidenceFile:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         d = dict(src_dict)
-        file_id = UUID(d.pop("file_id"))
+        id = UUID(d.pop("id"))
 
         livemode = d.pop("livemode")
 
         dispute_evidence_file = cls(
-            file_id=file_id,
+            id=id,
             livemode=livemode,
         )
 

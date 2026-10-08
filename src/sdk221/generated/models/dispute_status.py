@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 
-class DisputeDisputeStatus(StrEnum):
+class DisputeStatus(StrEnum):
     ACCEPTED = "accepted"
     CHALLENGED = "challenged"
     LOST = "lost"

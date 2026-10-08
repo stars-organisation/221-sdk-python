@@ -1,9 +1,10 @@
 from enum import StrEnum
 
 
-class PaymentAttemptErrorCode(StrEnum):
+class ApercuInvitationStatus(StrEnum):
     EXPIRED = "expired"
-    PROVIDER_FAILED = "provider_failed"
+    PENDING = "pending"
+    USED = "used"
 
     def __str__(self) -> str:
         return str(self.value)

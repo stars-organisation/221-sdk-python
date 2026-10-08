@@ -23,9 +23,9 @@ class PaymentLink:
         currency (PaymentLinkCurrency):
         description (str):
         expiry (datetime.datetime | None):
+        id (UUID):
         link_to_pay (str): Page de paiement à partager : chaque visite crée un paiement.
         livemode (bool): true : objet du mode live ; false : mode test.
-        payment_link_id (UUID):
         status (PaymentLinkStatus):
     """
 
@@ -34,9 +34,9 @@ class PaymentLink:
     currency: PaymentLinkCurrency
     description: str
     expiry: datetime.datetime | None
+    id: UUID
     link_to_pay: str
     livemode: bool
-    payment_link_id: UUID
     status: PaymentLinkStatus
 
     def to_dict(self) -> dict[str, Any]:
@@ -54,11 +54,11 @@ class PaymentLink:
         else:
             expiry = self.expiry
 
+        id = str(self.id)
+
         link_to_pay = self.link_to_pay
 
         livemode = self.livemode
-
-        payment_link_id = str(self.payment_link_id)
 
         status = self.status.value
 
@@ -71,9 +71,9 @@ class PaymentLink:
                 "currency": currency,
                 "description": description,
                 "expiry": expiry,
+                "id": id,
                 "link_to_pay": link_to_pay,
                 "livemode": livemode,
-                "payment_link_id": payment_link_id,
                 "status": status,
             }
         )
@@ -106,11 +106,11 @@ class PaymentLink:
 
         expiry = _parse_expiry(d.pop("expiry"))
 
+        id = UUID(d.pop("id"))
+
         link_to_pay = d.pop("link_to_pay")
 
         livemode = d.pop("livemode")
-
-        payment_link_id = UUID(d.pop("payment_link_id"))
 
         status = PaymentLinkStatus(d.pop("status"))
 
@@ -120,9 +120,9 @@ class PaymentLink:
             currency=currency,
             description=description,
             expiry=expiry,
+            id=id,
             link_to_pay=link_to_pay,
             livemode=livemode,
-            payment_link_id=payment_link_id,
             status=status,
         )
 

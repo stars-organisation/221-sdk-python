@@ -13,7 +13,7 @@ if response.status_code == 200:
     print("En ligne :", response.parsed.pagination.total, "jours fériés en 2026, le premier :", first["date"], first["name"]["fr"], f"({first['date_status']})", "quota restant", response.headers["RateLimit-Remaining"])
 elif isinstance(response.parsed, Error):
     retry = f" (réessayez dans {response.headers['Retry-After']} s)" if response.status_code == 429 else ""
-    print(f"{response.status_code} {response.parsed.error.code} : {response.parsed.error.message}{retry}")
+    print(f"{response.status_code} {response.parsed.code} : {response.parsed.message}{retry}")
 else:
     print(response.status_code, response.content.decode())
 

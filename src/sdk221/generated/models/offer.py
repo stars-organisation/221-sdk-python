@@ -25,13 +25,13 @@ class Offer:
         created_at (datetime.datetime):
         description (str):
         end_time (datetime.datetime | None):
+        id (UUID):
         livemode (bool): true : objet du mode live ; false : mode test.
         max_order_amount (None | str): Montant en francs CFA entiers (XOF), écrit en chaîne de chiffres, sans espace ni
             décimale.
         min_order_amount (None | str): Montant en francs CFA entiers (XOF), écrit en chaîne de chiffres, sans espace ni
             décimale.
         offer_code (str):
-        offer_id (UUID):
         start_time (datetime.datetime | None):
         status (OfferStatus): deleted : réponse du DELETE ; l'offre n'est plus listée ni lisible.
         title (str):
@@ -42,11 +42,11 @@ class Offer:
     created_at: datetime.datetime
     description: str
     end_time: datetime.datetime | None
+    id: UUID
     livemode: bool
     max_order_amount: None | str
     min_order_amount: None | str
     offer_code: str
-    offer_id: UUID
     start_time: datetime.datetime | None
     status: OfferStatus
     title: str
@@ -65,6 +65,8 @@ class Offer:
         else:
             end_time = self.end_time
 
+        id = str(self.id)
+
         livemode = self.livemode
 
         max_order_amount: None | str
@@ -74,8 +76,6 @@ class Offer:
         min_order_amount = self.min_order_amount
 
         offer_code = self.offer_code
-
-        offer_id = str(self.offer_id)
 
         start_time: None | str
         if isinstance(self.start_time, datetime.datetime):
@@ -97,11 +97,11 @@ class Offer:
                 "created_at": created_at,
                 "description": description,
                 "end_time": end_time,
+                "id": id,
                 "livemode": livemode,
                 "max_order_amount": max_order_amount,
                 "min_order_amount": min_order_amount,
                 "offer_code": offer_code,
-                "offer_id": offer_id,
                 "start_time": start_time,
                 "status": status,
                 "title": title,
@@ -137,6 +137,8 @@ class Offer:
 
         end_time = _parse_end_time(d.pop("end_time"))
 
+        id = UUID(d.pop("id"))
+
         livemode = d.pop("livemode")
 
         def _parse_max_order_amount(data: object) -> None | str:
@@ -154,8 +156,6 @@ class Offer:
         min_order_amount = _parse_min_order_amount(d.pop("min_order_amount"))
 
         offer_code = d.pop("offer_code")
-
-        offer_id = UUID(d.pop("offer_id"))
 
         def _parse_start_time(data: object) -> datetime.datetime | None:
             if data is None:
@@ -183,11 +183,11 @@ class Offer:
             created_at=created_at,
             description=description,
             end_time=end_time,
+            id=id,
             livemode=livemode,
             max_order_amount=max_order_amount,
             min_order_amount=min_order_amount,
             offer_code=offer_code,
-            offer_id=offer_id,
             start_time=start_time,
             status=status,
             title=title,

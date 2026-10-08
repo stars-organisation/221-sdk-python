@@ -16,7 +16,7 @@ def _get_kwargs(
     limit: str | Unset = UNSET,
     offset: str | Unset = UNSET,
     payment_id: str | Unset = UNSET,
-    dispute_status: str | Unset = UNSET,
+    status: str | Unset = UNSET,
     from_: str | Unset = UNSET,
     to: str | Unset = UNSET,
     authorization: str | Unset = UNSET,
@@ -57,7 +57,7 @@ def _get_kwargs(
 
     params["payment_id"] = payment_id
 
-    params["dispute_status"] = dispute_status
+    params["status"] = status
 
     params["from"] = from_
 
@@ -132,7 +132,7 @@ def sync_detailed(
     limit: str | Unset = UNSET,
     offset: str | Unset = UNSET,
     payment_id: str | Unset = UNSET,
-    dispute_status: str | Unset = UNSET,
+    status: str | Unset = UNSET,
     from_: str | Unset = UNSET,
     to: str | Unset = UNSET,
     authorization: str | Unset = UNSET,
@@ -149,7 +149,7 @@ def sync_detailed(
         limit (str | Unset):
         offset (str | Unset):
         payment_id (str | Unset):
-        dispute_status (str | Unset):
+        status (str | Unset):
         from_ (str | Unset):
         to (str | Unset):
         authorization (str | Unset):
@@ -173,7 +173,7 @@ def sync_detailed(
         limit=limit,
         offset=offset,
         payment_id=payment_id,
-        dispute_status=dispute_status,
+        status=status,
         from_=from_,
         to=to,
         authorization=authorization,
@@ -199,7 +199,7 @@ def sync(
     limit: str | Unset = UNSET,
     offset: str | Unset = UNSET,
     payment_id: str | Unset = UNSET,
-    dispute_status: str | Unset = UNSET,
+    status: str | Unset = UNSET,
     from_: str | Unset = UNSET,
     to: str | Unset = UNSET,
     authorization: str | Unset = UNSET,
@@ -216,7 +216,7 @@ def sync(
         limit (str | Unset):
         offset (str | Unset):
         payment_id (str | Unset):
-        dispute_status (str | Unset):
+        status (str | Unset):
         from_ (str | Unset):
         to (str | Unset):
         authorization (str | Unset):
@@ -241,7 +241,7 @@ def sync(
         limit=limit,
         offset=offset,
         payment_id=payment_id,
-        dispute_status=dispute_status,
+        status=status,
         from_=from_,
         to=to,
         authorization=authorization,
@@ -261,7 +261,7 @@ async def asyncio_detailed(
     limit: str | Unset = UNSET,
     offset: str | Unset = UNSET,
     payment_id: str | Unset = UNSET,
-    dispute_status: str | Unset = UNSET,
+    status: str | Unset = UNSET,
     from_: str | Unset = UNSET,
     to: str | Unset = UNSET,
     authorization: str | Unset = UNSET,
@@ -278,7 +278,7 @@ async def asyncio_detailed(
         limit (str | Unset):
         offset (str | Unset):
         payment_id (str | Unset):
-        dispute_status (str | Unset):
+        status (str | Unset):
         from_ (str | Unset):
         to (str | Unset):
         authorization (str | Unset):
@@ -302,7 +302,7 @@ async def asyncio_detailed(
         limit=limit,
         offset=offset,
         payment_id=payment_id,
-        dispute_status=dispute_status,
+        status=status,
         from_=from_,
         to=to,
         authorization=authorization,
@@ -326,7 +326,7 @@ async def asyncio(
     limit: str | Unset = UNSET,
     offset: str | Unset = UNSET,
     payment_id: str | Unset = UNSET,
-    dispute_status: str | Unset = UNSET,
+    status: str | Unset = UNSET,
     from_: str | Unset = UNSET,
     to: str | Unset = UNSET,
     authorization: str | Unset = UNSET,
@@ -343,7 +343,7 @@ async def asyncio(
         limit (str | Unset):
         offset (str | Unset):
         payment_id (str | Unset):
-        dispute_status (str | Unset):
+        status (str | Unset):
         from_ (str | Unset):
         to (str | Unset):
         authorization (str | Unset):
@@ -369,7 +369,7 @@ async def asyncio(
             limit=limit,
             offset=offset,
             payment_id=payment_id,
-            dispute_status=dispute_status,
+            status=status,
             from_=from_,
             to=to,
             authorization=authorization,

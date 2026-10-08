@@ -18,7 +18,7 @@ def test_matches_offline_snapshot():
     assert phone.parsed.operator.name == offline.operator_for("771234567")["operator"]
     assert phone.headers["RateLimit-Limit"]
     holidays = list_jours_feries.sync(client=api, year="2026", per_page=100)
-    assert holidays.data == offline.holidays(2026)
+    assert [day.to_dict() for day in holidays.data] == offline.holidays(2026)
     dakar = get_lieu.sync(client=api, id="reg_om6lpn2l")
     assert dakar.to_dict() == offline.place("reg_om6lpn2l")
 
@@ -26,6 +26,6 @@ def test_matches_offline_snapshot():
 def test_errors():
     missing = get_banque.sync_detailed(client=api, id="inconnue")
     assert missing.status_code == 404
-    assert isinstance(missing.parsed, Error) and missing.parsed.error.code == "not_found"
+    assert isinstance(missing.parsed, Error) and missing.parsed.code == "NOT_FOUND"
     bad_key = get_banque.sync_detailed(client=client("cle-invalide", BASE_URL), id="k0010a")
     assert bad_key.status_code == 401

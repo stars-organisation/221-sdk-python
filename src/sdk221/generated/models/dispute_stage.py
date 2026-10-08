@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 
-class DisputeDisputeStage(StrEnum):
+class DisputeStage(StrEnum):
     DISPUTE = "dispute"
     PRE_DISPUTE = "pre_dispute"
 

@@ -20,7 +20,7 @@ T = TypeVar("T", bound="Rattachement")
 class Rattachement:
     """
     Attributes:
-        arrondissement (Lieu):
+        arrondissement (Lieu | None):
         avertissements (list[str] | None):
         commune (Lieu):
         departement (Lieu):
@@ -33,7 +33,7 @@ class Rattachement:
         sources (list[Source] | None):
     """
 
-    arrondissement: Lieu
+    arrondissement: Lieu | None
     avertissements: list[str] | None
     commune: Lieu
     departement: Lieu
@@ -46,7 +46,13 @@ class Rattachement:
     sources: list[Source] | None
 
     def to_dict(self) -> dict[str, Any]:
-        arrondissement = self.arrondissement.to_dict()
+        from ..models.lieu import Lieu
+
+        arrondissement: dict[str, Any] | None
+        if isinstance(self.arrondissement, Lieu):
+            arrondissement = self.arrondissement.to_dict()
+        else:
+            arrondissement = self.arrondissement
 
         avertissements: list[str] | None
         if isinstance(self.avertissements, list):
@@ -108,7 +114,21 @@ class Rattachement:
         from ..models.source import Source
 
         d = dict(src_dict)
-        arrondissement = Lieu.from_dict(d.pop("arrondissement"))
+
+        def _parse_arrondissement(data: object) -> Lieu | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                arrondissement_type_0 = Lieu.from_dict(data)
+
+                return arrondissement_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(Lieu | None, data)
+
+        arrondissement = _parse_arrondissement(d.pop("arrondissement"))
 
         def _parse_avertissements(data: object) -> list[str] | None:
             if data is None:

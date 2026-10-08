@@ -20,7 +20,7 @@ T = TypeVar("T", bound="WebhookAttempt")
 class WebhookAttempt:
     """
     Attributes:
-        created (datetime.datetime):
+        created_at (datetime.datetime):
         delivery_attempt (int): Numéro de l'essai, à partir de 1.
         id (UUID):
         is_delivery_successful (bool): true pour une réponse 2xx.
@@ -29,7 +29,7 @@ class WebhookAttempt:
         response (WebhookResponse):
     """
 
-    created: datetime.datetime
+    created_at: datetime.datetime
     delivery_attempt: int
     id: UUID
     is_delivery_successful: bool
@@ -38,7 +38,7 @@ class WebhookAttempt:
     response: WebhookResponse
 
     def to_dict(self) -> dict[str, Any]:
-        created = self.created.isoformat()
+        created_at = self.created_at.isoformat()
 
         delivery_attempt = self.delivery_attempt
 
@@ -56,7 +56,7 @@ class WebhookAttempt:
 
         field_dict.update(
             {
-                "created": created,
+                "created_at": created_at,
                 "delivery_attempt": delivery_attempt,
                 "id": id,
                 "is_delivery_successful": is_delivery_successful,
@@ -74,7 +74,7 @@ class WebhookAttempt:
         from ..models.webhook_response import WebhookResponse
 
         d = dict(src_dict)
-        created = datetime.datetime.fromisoformat(d.pop("created"))
+        created_at = datetime.datetime.fromisoformat(d.pop("created_at"))
 
         delivery_attempt = d.pop("delivery_attempt")
 
@@ -89,7 +89,7 @@ class WebhookAttempt:
         response = WebhookResponse.from_dict(d.pop("response"))
 
         webhook_attempt = cls(
-            created=created,
+            created_at=created_at,
             delivery_attempt=delivery_attempt,
             id=id,
             is_delivery_successful=is_delivery_successful,

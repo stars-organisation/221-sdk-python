@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from typing_extensions import Self
@@ -19,23 +19,29 @@ class Extremite:
     Attributes:
         entree (str):
         lat (float):
-        lieu (LieuResume):
+        lieu (LieuResume | None):
         lon (float):
         precision (str):
     """
 
     entree: str
     lat: float
-    lieu: LieuResume
+    lieu: LieuResume | None
     lon: float
     precision: str
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.lieu_resume import LieuResume
+
         entree = self.entree
 
         lat = self.lat
 
-        lieu = self.lieu.to_dict()
+        lieu: dict[str, Any] | None
+        if isinstance(self.lieu, LieuResume):
+            lieu = self.lieu.to_dict()
+        else:
+            lieu = self.lieu
 
         lon = self.lon
 
@@ -64,7 +70,20 @@ class Extremite:
 
         lat = d.pop("lat")
 
-        lieu = LieuResume.from_dict(d.pop("lieu"))
+        def _parse_lieu(data: object) -> LieuResume | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                lieu_type_0 = LieuResume.from_dict(data)
+
+                return lieu_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(LieuResume | None, data)
+
+        lieu = _parse_lieu(d.pop("lieu"))
 
         lon = d.pop("lon")
 

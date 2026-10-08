@@ -1,9 +1,9 @@
 from enum import StrEnum
 
 
-class PaymentRequestMethod(StrEnum):
-    ORANGE = "orange"
-    WAVE = "wave"
+class PayoutDestinationType(StrEnum):
+    BANK = "bank"
+    MOBILE = "mobile"
 
     def __str__(self) -> str:
         return str(self.value)

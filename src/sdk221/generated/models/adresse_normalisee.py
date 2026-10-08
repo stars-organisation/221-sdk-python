@@ -6,8 +6,6 @@ from typing import TYPE_CHECKING, Any, TypeVar, cast
 from attrs import define as _attrs_define
 from typing_extensions import Self
 
-from ..models.adresse_normalisee_relation import AdresseNormaliseeRelation
-
 if TYPE_CHECKING:
     from ..models.lieu_resume import LieuResume
     from ..models.recognised import Recognised
@@ -22,26 +20,28 @@ class AdresseNormalisee:
     Attributes:
         alternatives (list[LieuResume] | None):
         ambigu (bool):
-        lieu (LieuResume):
+        lieu (LieuResume | None):
         lieu_id (None | str):
         lieux_reconnus (list[Recognised] | None):
         limites (str):
-        relation (AdresseNormaliseeRelation):
+        relation (None | str): en_face_de, derriere, a_cote_de ou pres_de ; null si aucune relation n'est reconnue.
         repere (None | str):
         texte (str):
     """
 
     alternatives: list[LieuResume] | None
     ambigu: bool
-    lieu: LieuResume
+    lieu: LieuResume | None
     lieu_id: None | str
     lieux_reconnus: list[Recognised] | None
     limites: str
-    relation: AdresseNormaliseeRelation
+    relation: None | str
     repere: None | str
     texte: str
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.lieu_resume import LieuResume
+
         alternatives: list[dict[str, Any]] | None
         if isinstance(self.alternatives, list):
             alternatives = []
@@ -54,7 +54,11 @@ class AdresseNormalisee:
 
         ambigu = self.ambigu
 
-        lieu = self.lieu.to_dict()
+        lieu: dict[str, Any] | None
+        if isinstance(self.lieu, LieuResume):
+            lieu = self.lieu.to_dict()
+        else:
+            lieu = self.lieu
 
         lieu_id: None | str
         lieu_id = self.lieu_id
@@ -71,7 +75,8 @@ class AdresseNormalisee:
 
         limites = self.limites
 
-        relation = self.relation.value
+        relation: None | str
+        relation = self.relation
 
         repere: None | str
         repere = self.repere
@@ -127,7 +132,20 @@ class AdresseNormalisee:
 
         ambigu = d.pop("ambigu")
 
-        lieu = LieuResume.from_dict(d.pop("lieu"))
+        def _parse_lieu(data: object) -> LieuResume | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                lieu_type_0 = LieuResume.from_dict(data)
+
+                return lieu_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(LieuResume | None, data)
+
+        lieu = _parse_lieu(d.pop("lieu"))
 
         def _parse_lieu_id(data: object) -> None | str:
             if data is None:
@@ -160,7 +178,12 @@ class AdresseNormalisee:
 
         limites = d.pop("limites")
 
-        relation = AdresseNormaliseeRelation(d.pop("relation"))
+        def _parse_relation(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        relation = _parse_relation(d.pop("relation"))
 
         def _parse_repere(data: object) -> None | str:
             if data is None:

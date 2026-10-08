@@ -15,9 +15,8 @@ class Customer:
     """
     Attributes:
         created_at (datetime.datetime): Date du premier paiement.
-        customer_id (str): Le numéro de téléphone : un client n'est pas stocké, c'est l'ensemble des paiements d'un même
-            numéro.
         email (None | str):
+        id (str): Le numéro de téléphone : un client n'est pas stocké, c'est l'ensemble des paiements d'un même numéro.
         livemode (bool): true : objet du mode live ; false : mode test.
         name (None | str):
         payments_count (int): Tous les essais, quel que soit leur état.
@@ -27,8 +26,8 @@ class Customer:
     """
 
     created_at: datetime.datetime
-    customer_id: str
     email: None | str
+    id: str
     livemode: bool
     name: None | str
     payments_count: int
@@ -39,10 +38,10 @@ class Customer:
     def to_dict(self) -> dict[str, Any]:
         created_at = self.created_at.isoformat()
 
-        customer_id = self.customer_id
-
         email: None | str
         email = self.email
+
+        id = self.id
 
         livemode = self.livemode
 
@@ -62,8 +61,8 @@ class Customer:
         field_dict.update(
             {
                 "created_at": created_at,
-                "customer_id": customer_id,
                 "email": email,
+                "id": id,
                 "livemode": livemode,
                 "name": name,
                 "payments_count": payments_count,
@@ -80,14 +79,14 @@ class Customer:
         d = dict(src_dict)
         created_at = datetime.datetime.fromisoformat(d.pop("created_at"))
 
-        customer_id = d.pop("customer_id")
-
         def _parse_email(data: object) -> None | str:
             if data is None:
                 return data
             return cast(None | str, data)
 
         email = _parse_email(d.pop("email"))
+
+        id = d.pop("id")
 
         livemode = d.pop("livemode")
 
@@ -108,8 +107,8 @@ class Customer:
 
         customer = cls(
             created_at=created_at,
-            customer_id=customer_id,
             email=email,
+            id=id,
             livemode=livemode,
             name=name,
             payments_count=payments_count,

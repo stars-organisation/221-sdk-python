@@ -79,6 +79,11 @@ def _parse_response(
 
         return response_201
 
+    if response.status_code == 202:
+        response_202 = Payment.from_dict(response.json())
+
+        return response_202
+
     if response.status_code == 400:
         response_400 = PayError.from_dict(response.json())
 
@@ -103,6 +108,11 @@ def _parse_response(
         response_409 = PayError.from_dict(response.json())
 
         return response_409
+
+    if response.status_code == 413:
+        response_413 = PayError.from_dict(response.json())
+
+        return response_413
 
     if response.status_code == 429:
         response_429 = PayError.from_dict(response.json())

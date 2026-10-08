@@ -9,8 +9,6 @@ from attrs import define as _attrs_define
 from typing_extensions import Self
 
 from ..models.payment_detail_currency import PaymentDetailCurrency
-from ..models.payment_detail_error_code import PaymentDetailErrorCode
-from ..models.payment_detail_method import PaymentDetailMethod
 from ..models.payment_detail_rail import PaymentDetailRail
 from ..models.payment_detail_status import PaymentDetailStatus
 from ..models.payment_detail_withdrawal_eligibility import (
@@ -37,65 +35,55 @@ class PaymentDetail:
         attempts (list[PaymentAttempt]):
         checkout_url (None | str): Page de paiement ; null quand l'opérateur ne donne qu'un QR code ou une consigne
             (voir next_action).
-        created (datetime.datetime): Même valeur que created_at.
         created_at (datetime.datetime):
         currency (PaymentDetailCurrency):
         customer (PaymentCustomer):
-        description (str): Même valeur que merchant_reference.
         disputes (list[Dispute]): Réservé : toujours vide. Les litiges sont sous GET /v1/disputes?payment_id=.
-        error_code (PaymentDetailErrorCode): Présent quand le paiement a échoué ou expiré.
+        error_code (None | str): provider_failed ou expired ; null tant que le paiement n'a pas échoué.
         error_message (None | str): Texte de error_code, dans la langue de la requête.
         fee (None | str): Frais totaux ; null tant que le paiement n'est pas confirmé.
         id (UUID):
         livemode (bool): true : objet du mode live ; false : mode test.
-        merchant_order_reference_id (str): Même valeur que merchant_reference.
         merchant_reference (str):
         modified_at (datetime.datetime):
         net (None | str): Montant crédité au marchand ; null tant que le paiement n'est pas confirmé.
-        net_amount (None | str): Même valeur que net.
         next_action (NextActionType0 | None):
-        payment_id (UUID): Même valeur que id.
-        payment_method (str): wave ou orange_money pour le Sénégal, sinon l'identifiant du moyen de paiement.
         rail (PaymentDetailRail): Moyen de paiement : pays et opérateur (liste et état : GET /v1/rails).
         refunds (list[RefundCore]):
         status (PaymentDetailStatus):
         withdrawal_eligibility (PaymentDetailWithdrawalEligibility): confirmed : l'argent est retirable.
         discount_amount (str | Unset): Remise accordée, avec offer_code.
-        method (PaymentDetailMethod | Unset): Présent seulement pour sn_wave et sn_orange. Utilisez rail.
         offer_code (str | Unset): Présent si un code promo a été appliqué.
         original_amount (None | str | Unset): Montant avant remise, avec offer_code.
+        payment_link_description (str | Unset): Présent pour un paiement fait sur un lien de paiement : la description
+            du lien, à afficher à la place de merchant_reference (link:…). EN: present for a payment made on a payment link:
+            the link's description, to show instead of merchant_reference (link:…).
     """
 
     amount: str
     attempts: list[PaymentAttempt]
     checkout_url: None | str
-    created: datetime.datetime
     created_at: datetime.datetime
     currency: PaymentDetailCurrency
     customer: PaymentCustomer
-    description: str
     disputes: list[Dispute]
-    error_code: PaymentDetailErrorCode
+    error_code: None | str
     error_message: None | str
     fee: None | str
     id: UUID
     livemode: bool
-    merchant_order_reference_id: str
     merchant_reference: str
     modified_at: datetime.datetime
     net: None | str
-    net_amount: None | str
     next_action: NextActionType0 | None
-    payment_id: UUID
-    payment_method: str
     rail: PaymentDetailRail
     refunds: list[RefundCore]
     status: PaymentDetailStatus
     withdrawal_eligibility: PaymentDetailWithdrawalEligibility
     discount_amount: str | Unset = UNSET
-    method: PaymentDetailMethod | Unset = UNSET
     offer_code: str | Unset = UNSET
     original_amount: None | str | Unset = UNSET
+    payment_link_description: str | Unset = UNSET
 
     def to_dict(self) -> dict[str, Any]:
         from ..models.next_action_type_0 import NextActionType0
@@ -110,22 +98,19 @@ class PaymentDetail:
         checkout_url: None | str
         checkout_url = self.checkout_url
 
-        created = self.created.isoformat()
-
         created_at = self.created_at.isoformat()
 
         currency = self.currency.value
 
         customer = self.customer.to_dict()
 
-        description = self.description
-
         disputes = []
         for disputes_item_data in self.disputes:
             disputes_item = disputes_item_data.to_dict()
             disputes.append(disputes_item)
 
-        error_code = self.error_code.value
+        error_code: None | str
+        error_code = self.error_code
 
         error_message: None | str
         error_message = self.error_message
@@ -137,8 +122,6 @@ class PaymentDetail:
 
         livemode = self.livemode
 
-        merchant_order_reference_id = self.merchant_order_reference_id
-
         merchant_reference = self.merchant_reference
 
         modified_at = self.modified_at.isoformat()
@@ -146,18 +129,11 @@ class PaymentDetail:
         net: None | str
         net = self.net
 
-        net_amount: None | str
-        net_amount = self.net_amount
-
         next_action: dict[str, Any] | None
         if isinstance(self.next_action, NextActionType0):
             next_action = self.next_action.to_dict()
         else:
             next_action = self.next_action
-
-        payment_id = str(self.payment_id)
-
-        payment_method = self.payment_method
 
         rail = self.rail.value
 
@@ -172,10 +148,6 @@ class PaymentDetail:
 
         discount_amount = self.discount_amount
 
-        method: str | Unset = UNSET
-        if not isinstance(self.method, Unset):
-            method = self.method.value
-
         offer_code = self.offer_code
 
         original_amount: None | str | Unset
@@ -184,6 +156,8 @@ class PaymentDetail:
         else:
             original_amount = self.original_amount
 
+        payment_link_description = self.payment_link_description
+
         field_dict: dict[str, Any] = {}
 
         field_dict.update(
@@ -191,25 +165,19 @@ class PaymentDetail:
                 "amount": amount,
                 "attempts": attempts,
                 "checkout_url": checkout_url,
-                "created": created,
                 "created_at": created_at,
                 "currency": currency,
                 "customer": customer,
-                "description": description,
                 "disputes": disputes,
                 "error_code": error_code,
                 "error_message": error_message,
                 "fee": fee,
                 "id": id,
                 "livemode": livemode,
-                "merchant_order_reference_id": merchant_order_reference_id,
                 "merchant_reference": merchant_reference,
                 "modified_at": modified_at,
                 "net": net,
-                "net_amount": net_amount,
                 "next_action": next_action,
-                "payment_id": payment_id,
-                "payment_method": payment_method,
                 "rail": rail,
                 "refunds": refunds,
                 "status": status,
@@ -218,12 +186,12 @@ class PaymentDetail:
         )
         if discount_amount is not UNSET:
             field_dict["discount_amount"] = discount_amount
-        if method is not UNSET:
-            field_dict["method"] = method
         if offer_code is not UNSET:
             field_dict["offer_code"] = offer_code
         if original_amount is not UNSET:
             field_dict["original_amount"] = original_amount
+        if payment_link_description is not UNSET:
+            field_dict["payment_link_description"] = payment_link_description
 
         return field_dict
 
@@ -252,15 +220,11 @@ class PaymentDetail:
 
         checkout_url = _parse_checkout_url(d.pop("checkout_url"))
 
-        created = datetime.datetime.fromisoformat(d.pop("created"))
-
         created_at = datetime.datetime.fromisoformat(d.pop("created_at"))
 
         currency = PaymentDetailCurrency(d.pop("currency"))
 
         customer = PaymentCustomer.from_dict(d.pop("customer"))
-
-        description = d.pop("description")
 
         disputes = []
         _disputes = d.pop("disputes")
@@ -269,7 +233,12 @@ class PaymentDetail:
 
             disputes.append(disputes_item)
 
-        error_code = PaymentDetailErrorCode(d.pop("error_code"))
+        def _parse_error_code(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        error_code = _parse_error_code(d.pop("error_code"))
 
         def _parse_error_message(data: object) -> None | str:
             if data is None:
@@ -289,8 +258,6 @@ class PaymentDetail:
 
         livemode = d.pop("livemode")
 
-        merchant_order_reference_id = d.pop("merchant_order_reference_id")
-
         merchant_reference = d.pop("merchant_reference")
 
         modified_at = datetime.datetime.fromisoformat(d.pop("modified_at"))
@@ -301,13 +268,6 @@ class PaymentDetail:
             return cast(None | str, data)
 
         net = _parse_net(d.pop("net"))
-
-        def _parse_net_amount(data: object) -> None | str:
-            if data is None:
-                return data
-            return cast(None | str, data)
-
-        net_amount = _parse_net_amount(d.pop("net_amount"))
 
         def _parse_next_action(data: object) -> NextActionType0 | None:
             if data is None:
@@ -323,10 +283,6 @@ class PaymentDetail:
             return cast(NextActionType0 | None, data)
 
         next_action = _parse_next_action(d.pop("next_action"))
-
-        payment_id = UUID(d.pop("payment_id"))
-
-        payment_method = d.pop("payment_method")
 
         rail = PaymentDetailRail(d.pop("rail"))
 
@@ -345,13 +301,6 @@ class PaymentDetail:
 
         discount_amount = d.pop("discount_amount", UNSET)
 
-        _method = d.pop("method", UNSET)
-        method: PaymentDetailMethod | Unset
-        if isinstance(_method, Unset):
-            method = UNSET
-        else:
-            method = PaymentDetailMethod(_method)
-
         offer_code = d.pop("offer_code", UNSET)
 
         def _parse_original_amount(data: object) -> None | str | Unset:
@@ -363,37 +312,33 @@ class PaymentDetail:
 
         original_amount = _parse_original_amount(d.pop("original_amount", UNSET))
 
+        payment_link_description = d.pop("payment_link_description", UNSET)
+
         payment_detail = cls(
             amount=amount,
             attempts=attempts,
             checkout_url=checkout_url,
-            created=created,
             created_at=created_at,
             currency=currency,
             customer=customer,
-            description=description,
             disputes=disputes,
             error_code=error_code,
             error_message=error_message,
             fee=fee,
             id=id,
             livemode=livemode,
-            merchant_order_reference_id=merchant_order_reference_id,
             merchant_reference=merchant_reference,
             modified_at=modified_at,
             net=net,
-            net_amount=net_amount,
             next_action=next_action,
-            payment_id=payment_id,
-            payment_method=payment_method,
             rail=rail,
             refunds=refunds,
             status=status,
             withdrawal_eligibility=withdrawal_eligibility,
             discount_amount=discount_amount,
-            method=method,
             offer_code=offer_code,
             original_amount=original_amount,
+            payment_link_description=payment_link_description,
         )
 
         return payment_detail

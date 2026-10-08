@@ -19,15 +19,15 @@ class DisputeEvidence:
     Attributes:
         created_at (datetime.datetime):
         evidence_type (DisputeEvidenceEvidenceType):
-        file_id (UUID):
         file_name (str):
+        id (UUID):
         size (int): Octets.
     """
 
     created_at: datetime.datetime
     evidence_type: DisputeEvidenceEvidenceType
-    file_id: UUID
     file_name: str
+    id: UUID
     size: int
 
     def to_dict(self) -> dict[str, Any]:
@@ -35,9 +35,9 @@ class DisputeEvidence:
 
         evidence_type = self.evidence_type.value
 
-        file_id = str(self.file_id)
-
         file_name = self.file_name
+
+        id = str(self.id)
 
         size = self.size
 
@@ -47,8 +47,8 @@ class DisputeEvidence:
             {
                 "created_at": created_at,
                 "evidence_type": evidence_type,
-                "file_id": file_id,
                 "file_name": file_name,
+                "id": id,
                 "size": size,
             }
         )
@@ -62,17 +62,17 @@ class DisputeEvidence:
 
         evidence_type = DisputeEvidenceEvidenceType(d.pop("evidence_type"))
 
-        file_id = UUID(d.pop("file_id"))
-
         file_name = d.pop("file_name")
+
+        id = UUID(d.pop("id"))
 
         size = d.pop("size")
 
         dispute_evidence = cls(
             created_at=created_at,
             evidence_type=evidence_type,
-            file_id=file_id,
             file_name=file_name,
+            id=id,
             size=size,
         )
 

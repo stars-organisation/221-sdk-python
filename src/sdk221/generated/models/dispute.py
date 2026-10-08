@@ -9,9 +9,9 @@ from attrs import define as _attrs_define
 from typing_extensions import Self
 
 from ..models.dispute_currency import DisputeCurrency
-from ..models.dispute_dispute_stage import DisputeDisputeStage
-from ..models.dispute_dispute_status import DisputeDisputeStatus
 from ..models.dispute_reason import DisputeReason
+from ..models.dispute_stage import DisputeStage
+from ..models.dispute_status import DisputeStatus
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -29,14 +29,14 @@ class Dispute:
         challenge_required_by (datetime.datetime): Date limite pour contester.
         created_at (datetime.datetime):
         currency (DisputeCurrency):
-        dispute_id (UUID):
-        dispute_stage (DisputeDisputeStage):
-        dispute_status (DisputeDisputeStatus):
+        id (UUID):
         is_already_refunded (bool):
         livemode (bool): true : objet du mode live ; false : mode test.
         payment_id (UUID):
         project_id (UUID):
         reason (DisputeReason):
+        stage (DisputeStage):
+        status (DisputeStatus):
         updated_at (datetime.datetime):
         evidence (list[DisputeEvidence] | Unset): Pièces jointes ; absent des listes.
     """
@@ -45,14 +45,14 @@ class Dispute:
     challenge_required_by: datetime.datetime
     created_at: datetime.datetime
     currency: DisputeCurrency
-    dispute_id: UUID
-    dispute_stage: DisputeDisputeStage
-    dispute_status: DisputeDisputeStatus
+    id: UUID
     is_already_refunded: bool
     livemode: bool
     payment_id: UUID
     project_id: UUID
     reason: DisputeReason
+    stage: DisputeStage
+    status: DisputeStatus
     updated_at: datetime.datetime
     evidence: list[DisputeEvidence] | Unset = UNSET
 
@@ -65,11 +65,7 @@ class Dispute:
 
         currency = self.currency.value
 
-        dispute_id = str(self.dispute_id)
-
-        dispute_stage = self.dispute_stage.value
-
-        dispute_status = self.dispute_status.value
+        id = str(self.id)
 
         is_already_refunded = self.is_already_refunded
 
@@ -80,6 +76,10 @@ class Dispute:
         project_id = str(self.project_id)
 
         reason = self.reason.value
+
+        stage = self.stage.value
+
+        status = self.status.value
 
         updated_at = self.updated_at.isoformat()
 
@@ -98,14 +98,14 @@ class Dispute:
                 "challenge_required_by": challenge_required_by,
                 "created_at": created_at,
                 "currency": currency,
-                "dispute_id": dispute_id,
-                "dispute_stage": dispute_stage,
-                "dispute_status": dispute_status,
+                "id": id,
                 "is_already_refunded": is_already_refunded,
                 "livemode": livemode,
                 "payment_id": payment_id,
                 "project_id": project_id,
                 "reason": reason,
+                "stage": stage,
+                "status": status,
                 "updated_at": updated_at,
             }
         )
@@ -129,11 +129,7 @@ class Dispute:
 
         currency = DisputeCurrency(d.pop("currency"))
 
-        dispute_id = UUID(d.pop("dispute_id"))
-
-        dispute_stage = DisputeDisputeStage(d.pop("dispute_stage"))
-
-        dispute_status = DisputeDisputeStatus(d.pop("dispute_status"))
+        id = UUID(d.pop("id"))
 
         is_already_refunded = d.pop("is_already_refunded")
 
@@ -144,6 +140,10 @@ class Dispute:
         project_id = UUID(d.pop("project_id"))
 
         reason = DisputeReason(d.pop("reason"))
+
+        stage = DisputeStage(d.pop("stage"))
+
+        status = DisputeStatus(d.pop("status"))
 
         updated_at = datetime.datetime.fromisoformat(d.pop("updated_at"))
 
@@ -161,14 +161,14 @@ class Dispute:
             challenge_required_by=challenge_required_by,
             created_at=created_at,
             currency=currency,
-            dispute_id=dispute_id,
-            dispute_stage=dispute_stage,
-            dispute_status=dispute_status,
+            id=id,
             is_already_refunded=is_already_refunded,
             livemode=livemode,
             payment_id=payment_id,
             project_id=project_id,
             reason=reason,
+            stage=stage,
+            status=status,
             updated_at=updated_at,
             evidence=evidence,
         )

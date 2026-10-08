@@ -91,6 +91,11 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 413:
+        response_413 = PayError.from_dict(response.json())
+
+        return response_413
+
     if response.status_code == 429:
         response_429 = PayError.from_dict(response.json())
 

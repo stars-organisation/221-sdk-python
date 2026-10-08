@@ -9,9 +9,6 @@ from typing_extensions import Self
 
 from ..models.kyc_status_merchant_status import KycStatusMerchantStatus
 from ..models.kyc_status_status import KycStatusStatus
-from ..models.kyc_status_withdrawals_blocked_reason import (
-    KycStatusWithdrawalsBlockedReason,
-)
 
 T = TypeVar("T", bound="KycStatus")
 
@@ -31,7 +28,8 @@ class KycStatus:
         uploaded (list[str]): Photos déjà reçues.
         verification_id (None | str): Renseigné quand la vérification est pending.
         withdrawals_blocked (bool):
-        withdrawals_blocked_reason (KycStatusWithdrawalsBlockedReason):
+        withdrawals_blocked_reason (None | str): merchant_suspended ou kyc_required ; null si les retraits sont
+            autorisés.
     """
 
     country: None | str
@@ -45,7 +43,7 @@ class KycStatus:
     uploaded: list[str]
     verification_id: None | str
     withdrawals_blocked: bool
-    withdrawals_blocked_reason: KycStatusWithdrawalsBlockedReason
+    withdrawals_blocked_reason: None | str
 
     def to_dict(self) -> dict[str, Any]:
         country: None | str
@@ -78,7 +76,8 @@ class KycStatus:
 
         withdrawals_blocked = self.withdrawals_blocked
 
-        withdrawals_blocked_reason = self.withdrawals_blocked_reason.value
+        withdrawals_blocked_reason: None | str
+        withdrawals_blocked_reason = self.withdrawals_blocked_reason
 
         field_dict: dict[str, Any] = {}
 
@@ -160,7 +159,12 @@ class KycStatus:
 
         withdrawals_blocked = d.pop("withdrawals_blocked")
 
-        withdrawals_blocked_reason = KycStatusWithdrawalsBlockedReason(
+        def _parse_withdrawals_blocked_reason(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        withdrawals_blocked_reason = _parse_withdrawals_blocked_reason(
             d.pop("withdrawals_blocked_reason")
         )
 
