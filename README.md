@@ -1,5 +1,7 @@
 # SDK Python 221
 
+Paiements Wave et Orange Money par API : [221 Pay](https://221.orvlabs.com/pay).
+
 Client de l'API 221 généré depuis l'OpenAPI par
 [openapi-python-client](https://github.com/openapi-generators/openapi-python-client)
 (EF-221-02), vérification des signatures de webhook et données de référence hors
@@ -19,7 +21,6 @@ principal (`generate.sh`) ; ce dépôt publie le résultat.
 uv add sdk-221     # ou, dans un environnement virtuel : pip install sdk-221
 ```
 
-Pas encore publié sur PyPI : la commande fonctionnera à la publication.
 
 ## Développement
 
